@@ -23,6 +23,15 @@ namespace Coding
         public MainWindow()
         {
             InitializeComponent();
+
+            var convolutionViewMode = new ConvolutionViewModel();
+
+            this.DataContext = convolutionViewMode;
+        }
+
+        private void ConvolutionButton_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
