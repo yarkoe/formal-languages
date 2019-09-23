@@ -5,7 +5,7 @@
     /// </summary>
     class CodeTable
     {
-        public char[] commandChars { get; set; } = { };
+        public char[] OperationChars { get; set; } = { };
         public string[] Terminals { get; set; } = { };
         public string[] Nonterminals { get; set; } = { };
         public string[] Semantics { get; set; } = { };
