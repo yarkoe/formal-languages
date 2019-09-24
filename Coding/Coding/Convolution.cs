@@ -7,7 +7,7 @@ namespace Coding
     /// <summary>
     /// Предоставляет методы для свёртки лексем в числовой код.
     /// </summary>
-    class Convolution
+    public class Convolution
     {
         /// <summary>
         /// Сворачивает лексемы заданной грамматики в их коды в соответствие с заданной таблицей. 
@@ -25,6 +25,11 @@ namespace Coding
                 int lexemeCode = textConverter.ConvertNextLexeme();
 
                 if (lexemeCode == -1) return lexemeCodes;
+                else if (lexemeCode == 0)
+                {
+                    lexemeCodes.Add(lexemeCode);
+                    return lexemeCodes;
+                }
 
                 lexemeCodes.Add(lexemeCode);
             }
@@ -34,8 +39,8 @@ namespace Coding
         public enum LexemeType
         {
             OperationChars,
-            Terminals,
             Nonterminals,
+            Terminals,
             Semantics
         }
         /// <summary>
@@ -105,6 +110,14 @@ namespace Coding
                     int currentCode = GetFirstLexeme(currentLexemeType);
                     if (currentCode != 0)
                     {
+                        // Если нашли лексему в таблице.
+                        if (currentLexemeType == LexemeType.Nonterminals && Char.IsLower(codeTable.Nonterminals[currentCode - 11][0]))
+                        {
+                            // Здесь может быть найден нетерминал начинающийся только с заглавной буквы.
+                            continue;
+                        }
+
+
                         // Текущая лексема -- точка. Следующая ожидаемая -- терминал до двоеточия.
                         if (currentCode == 4) convertStatus = ConvertStatus.StNonterminalLeft;
 
@@ -114,14 +127,14 @@ namespace Coding
 
                 if (currentText.StartsWith("'"))
                 {
-                    currentText.Remove(0, 1);
+                    currentText = currentText.Remove(0, 1);
                     convertStatus = ConvertStatus.StTerminalQuotes;
 
                     return ConvertNextLexeme();
                 }
                 if (currentText.StartsWith("$"))
                 {
-                    currentText.Remove(0, 1);
+                    currentText = currentText.Remove(0, 1);
                     convertStatus = ConvertStatus.StSemantics;
 
                     return ConvertNextLexeme();
@@ -147,6 +160,14 @@ namespace Coding
             /// <returns>Код первой лексемы из массива нетерминалов или 0.</returns>
             private int ConvertOnNonterminalLeft()
             {
+                // Если после точки Eofgram
+                if (currentText.StartsWith("Eofgram"))
+                {
+                    currentText = currentText.Remove(0, "Eofgram".Length);
+
+                    return 1000;
+                }
+
                 // Следующая ожидаемая лексема -- двоеточие.
                 convertStatus = ConvertStatus.StColon;
 
@@ -161,7 +182,7 @@ namespace Coding
             {
                 if (currentText.StartsWith(":"))
                 {
-                    currentText.Remove(0, 1);
+                    currentText = currentText.Remove(0, 1);
 
                     convertStatus = ConvertStatus.StUndefined;
 
@@ -182,7 +203,7 @@ namespace Coding
 
                 if (currentText.StartsWith("'"))
                 {
-                    currentText.Remove(0, 1);
+                    currentText = currentText.Remove(0, 1);
                 }
                 else
                 {
@@ -216,7 +237,7 @@ namespace Coding
                     if (currentText.StartsWith(lexemes[i]))
                     {
                         // В случае совпадения в таблице -- удалить лексему.
-                        currentText.Remove(0, lexemes[i].Length);
+                        currentText = currentText.Remove(0, lexemes[i].Length);
                         // код знака операций.
                         return (i + absoluteLength);
                     }
