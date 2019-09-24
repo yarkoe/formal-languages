@@ -31,7 +31,7 @@ namespace Coding
 
         private void ConvolutionButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            (DataContext as ConvolutionViewModel).ConvertGrammaticalText();
         }
     }
 }

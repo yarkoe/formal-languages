@@ -41,7 +41,8 @@ namespace Coding
             OperationChars,
             Nonterminals,
             Terminals,
-            Semantics
+            Semantics,
+            NonterminalsUpper
         }
         /// <summary>
         /// Состояние последней конвертируемой лексемы.
@@ -107,17 +108,15 @@ namespace Coding
             {
                 foreach (LexemeType currentLexemeType in Enum.GetValues(typeof(LexemeType)))
                 {
+                    if (currentLexemeType == LexemeType.Nonterminals)
+                    {
+                        continue;
+                    }
+
                     int currentCode = GetFirstLexeme(currentLexemeType);
                     if (currentCode != 0)
                     {
                         // Если нашли лексему в таблице.
-                        if (currentLexemeType == LexemeType.Nonterminals && Char.IsLower(codeTable.Nonterminals[currentCode - 11][0]))
-                        {
-                            // Здесь может быть найден нетерминал начинающийся только с заглавной буквы.
-                            continue;
-                        }
-
-
                         // Текущая лексема -- точка. Следующая ожидаемая -- терминал до двоеточия.
                         if (currentCode == 4) convertStatus = ConvertStatus.StNonterminalLeft;
 
@@ -234,6 +233,12 @@ namespace Coding
 
                 for (int i = 0; i < lexemes.Length; i++)
                 {
+                    if (lexemeType == LexemeType.NonterminalsUpper && Char.IsLower(lexemes[i][0]))
+                    {
+                        // В случае нетерминала с первой заглавной буквы откидываем варианты лексем, начинающиеся со строчной буквы.
+                        continue;
+                    }
+
                     if (currentText.StartsWith(lexemes[i]))
                     {
                         // В случае совпадения в таблице -- удалить лексему.
@@ -268,7 +273,7 @@ namespace Coding
                         return codeTable.Semantics;
 
                     default:
-                        return codeTable.Semantics;
+                        return codeTable.Nonterminals;
                 }
 
             }

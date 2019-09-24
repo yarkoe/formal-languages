@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="grammaticalBox" Grid.Row="0" Grid.Column="0" Text="{Binding GrammaticalText}"></TextBox>
-            <TextBox x:Name="convolutionBox" Grid.Row="0" Grid.Column="1" IsReadOnly="True"></TextBox>
+            <TextBox x:Name="convolutionBox" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding NumericalConvolution, Mode=TwoWay}"></TextBox>
         </Grid>
         
         <Button x:Name="convolutionButton" Content="Конвертировать!" Grid.Row="1" Margin="300,30" Click="ConvolutionButton_Click"></Button>
