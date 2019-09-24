@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Coding
@@ -8,9 +9,25 @@ namespace Coding
     /// </summary>
     class Convolution
     {
-        public string Convert(string grammaticalText, CodeTable codeTable)
+        /// <summary>
+        /// Сворачивает лексемы заданной грамматики в их коды в соответствие с заданной таблицей. 
+        /// </summary>
+        /// <param name="grammaticalText">Исходная грамматика.</param>
+        /// <param name="codeTable">Заданная таблица.</param>
+        /// <returns>Лист кодов лексем грамматики по порядку.</returns>
+        public List<int> Convert(string grammaticalText, CodeTable codeTable)
         {
-            return "pass";
+            TextConverter textConverter = new TextConverter(grammaticalText, codeTable);
+
+            List<int> lexemeCodes = new List<int>();
+            while (true)
+            {
+                int lexemeCode = textConverter.ConvertNextLexeme();
+
+                if (lexemeCode == -1) return lexemeCodes;
+
+                lexemeCodes.Add(lexemeCode);
+            }
         }
 
 
@@ -57,7 +74,7 @@ namespace Coding
             /// <returns> Код лексемы. </returns>
             public int ConvertNextLexeme()
             {
-                if (currentText.Length == 0)
+                if (string.IsNullOrEmpty(currentText))
                     return -1; // метка конца.
 
                 switch (convertStatus)
