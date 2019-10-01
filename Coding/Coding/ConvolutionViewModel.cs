@@ -1,17 +1,31 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Coding
 {
-    public class ConvolutionViewModel
+    public class ConvolutionViewModel : INotifyPropertyChanged
     {
         /// <summary>
         /// Исходное представление грамматики.
         /// </summary>
         public string GrammaticalText { get; set; } = string.Empty;
-        public string NumericalConvolution { get; set; } = string.Empty;
+
+        private string numericalConvolution = string.Empty;
+        public string NumericalConvolution
+        {
+            get => numericalConvolution;
+            set
+            {
+                numericalConvolution = value;
+                NotifyPropertyChanged("NumericalConvolution");
+            }
+        }
 
         private Convolution convolution = new Convolution();
         private CodeTable codeTable = new CodeTable();
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public ConvolutionViewModel()
         {
@@ -37,6 +51,16 @@ namespace Coding
             }
 
             NumericalConvolution = tempNumericalConvolution;
+        }
+
+        public void NotifyPropertyChanged([CallerMemberName]string changedProperty = "")
+        {
+            if (PropertyChanged == null)
+            {
+                return;
+            }
+
+            PropertyChanged(this, new PropertyChangedEventArgs(changedProperty));
         }
     }
 }
