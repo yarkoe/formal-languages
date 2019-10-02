@@ -43,9 +43,30 @@ namespace Coding
             string[] grammaticalStrings = GrammaticalText.Split('\n');
 
             string tempNumericalConvolution = "";
+            bool nextAddition = false;
             foreach (string grammaticalString in grammaticalStrings)
             {
-                List<int> lexemeCodes = convolution.Convert(grammaticalString.Replace(" ", ""), codeTable);
+                string currentString = grammaticalString.Replace(" ", "").Replace("\r", "");
+                if (currentString.Length == 0) continue;
+
+                List<int> lexemeCodes;
+                if (!nextAddition)
+                {
+                    lexemeCodes = convolution.Convert(currentString, codeTable);
+                }
+                else
+                {
+                    lexemeCodes = convolution.AddConvert(currentString);
+                }
+
+                if (currentString.EndsWith("."))
+                {
+                    nextAddition = false;
+                }
+                else
+                {
+                    nextAddition = true;
+                }
 
                 tempNumericalConvolution += string.Join(",", lexemeCodes.ToArray()) + "\n";
             }

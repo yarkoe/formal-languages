@@ -10,6 +10,11 @@ namespace Coding
     public class Convolution
     {
         /// <summary>
+        /// Конвертер, обрабатывающий текущую строку.
+        /// </summary>
+        private TextConverter currentTextConverter;
+
+        /// <summary>
         /// Сворачивает лексемы заданной грамматики в их коды в соответствие с заданной таблицей. 
         /// </summary>
         /// <param name="grammaticalText">Исходная грамматика.</param>
@@ -17,12 +22,41 @@ namespace Coding
         /// <returns>Лист кодов лексем грамматики по порядку.</returns>
         public List<int> Convert(string grammaticalText, CodeTable codeTable)
         {
-            TextConverter textConverter = new TextConverter(grammaticalText, codeTable);
+            // Создаём новый конвертер для новой строки по новой таблице кодов.
+            currentTextConverter = new TextConverter(grammaticalText, codeTable);
 
+            return CreateConvertList();
+        }
+
+        /// <summary>
+        /// Конвертирует текст на основе предыдущего текста.
+        /// </summary>
+        /// <param name="grammaticalText"></param>
+        /// <returns></returns>
+        public List<int> AddConvert(string grammaticalText)
+        {
+            if (!(currentTextConverter is null))
+            {
+                currentTextConverter.currentText = grammaticalText;
+                return CreateConvertList();
+            }
+            else
+            {
+                // Ошибка вызова метода.
+                return new List<int> { 0 };
+            }
+        }
+
+        /// <summary>
+        /// Создаёт лист с кодами текста.
+        /// </summary>
+        /// <returns></returns>
+        private List<int> CreateConvertList()
+        {
             List<int> lexemeCodes = new List<int>();
             while (true)
             {
-                int lexemeCode = textConverter.ConvertNextLexeme();
+                int lexemeCode = currentTextConverter.ConvertNextLexeme();
 
                 if (lexemeCode == -1) return lexemeCodes;
                 else if (lexemeCode == 0)
@@ -65,7 +99,7 @@ namespace Coding
         {
             private ConvertStatus convertStatus = ConvertStatus.StNonterminalLeft;
 
-            private string currentText;
+            public string currentText;
             readonly private CodeTable codeTable;
 
             public TextConverter(string text, CodeTable codeTable)
