@@ -7,7 +7,7 @@ namespace Control1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter the file path to read text");
+            Console.WriteLine("Enter the file path to read the text");
             string fileReaderPath = Console.ReadLine();
             if (!File.Exists(fileReaderPath))
             {
@@ -16,7 +16,7 @@ namespace Control1
                 return;
             }
 
-            Console.WriteLine("Enter the file path to write dictionary");
+            Console.WriteLine("Enter the file path to write the dictionary");
             string fileWriterPath = Console.ReadLine();
 
             Concordance concordance = new Concordance();

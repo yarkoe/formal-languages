@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Control1
 {
@@ -49,11 +48,11 @@ namespace Control1
         /// <summary>
         /// Разделяет строку на слова и добавляет информацию в словарь.
         /// </summary>
-        /// <param name="line"></param>
-        /// <param name="lineNumber"></param>
+        /// <param name="line">Рассматриваемая строка.</param>
+        /// <param name="lineNumber">Номер рассматриваемой строки.</param>
         private void processLine(string line, int lineNumber)
         {
-            string[] separators = { " ", ";", ":", ",", "." };
+            string[] separators = { " ", ";", ":", ",", ".", "!", "?" };
             string[] words = line.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string word in words)
